@@ -120,6 +120,30 @@ exports.OneCourse = async (req, res, next) => {
   }
 };
 
+exports.analytics = async (req, res, next) => {
+  try {
+    const course = await MyCourse.findOne({
+      user: req.user._id,
+      Course: req.params.course_id,
+    }).populate({
+      path: 'quiz_attempted.quiz',
+      select: 'Title',
+    });
+    let arr = [];
+    course.quiz_attempted.map(async (c) => {
+      let obj = {
+        marks: c.marks,
+        title: c.quiz['Title'],
+      };
+      arr.push(obj);
+    });
+    console.log(arr);
+    return res.status(200).json({ success: true, data: arr });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
 //For admin Dashboard,so admin can keep track of students progress in particular Course
 
 exports.Student_Progress = async (req, res, next) => {
