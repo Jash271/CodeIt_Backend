@@ -1,4 +1,4 @@
-const Course = require('../Models/Course');
+const Course = require('../models/Course');
 const REDIS_PORT = process.env.PORT || 6379;
 const redis = require('redis');
 
