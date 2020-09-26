@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const { auth } = require('../middleware/auth');
-const redis = require('redis');
+
 const multer = require('multer');
 const { uuid } = require('uuidv4');
 const validation = require('../middleware/validation');
