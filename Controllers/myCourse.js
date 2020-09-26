@@ -123,7 +123,7 @@ exports.OneCourse = async (req, res, next) => {
 exports.analytics = async (req, res, next) => {
   try {
     const course = await MyCourse.findOne({
-      user: req.user._id,
+      user: req.params.user_id,
       Course: req.params.course_id,
     }).populate({
       path: 'quiz_attempted.quiz',
