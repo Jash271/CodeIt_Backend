@@ -41,67 +41,56 @@ let upload = multer({
   },
 });
 
-router.post(
-  '/register',
-  upload.single('imageUrl'),
-  validation,
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).send({
-        errors: errors.array(),
+router.post('/register', upload.single('imageUrl'), async (req, res) => {
+  const url = req.protocol + '://' + req.get('host');
+
+  const { name, email, password } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(400).json({
+        msg: 'User already exists',
       });
     }
-    const url = req.protocol + '://' + req.get('host');
+    console.log(req);
+    user = new User({
+      name,
+      email,
+      password,
+      imageUrl: url + '/public/' + req.file.filename,
+    });
 
-    const { name, email, password } = req.body;
+    const salt = await bcrypt.genSalt(10);
 
-    try {
-      let user = await User.findOne({ email });
+    user.password = await bcrypt.hash(password, salt);
 
-      if (user) {
-        return res.status(400).json({
-          msg: 'User already exists',
-        });
+    await user.save();
+
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      config.get('jwtSecret'),
+      {
+        expiresIn: 360000,
+      },
+      (err, token) => {
+        if (err) throw err;
+
+        res.json({ token, user });
       }
-
-      user = new User({
-        name,
-        email,
-        password,
-        imageUrl: url + '/public/' + req.file.filename,
-      });
-
-      const salt = await bcrypt.genSalt(10);
-
-      user.password = await bcrypt.hash(password, salt);
-
-      await user.save();
-
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
-
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        {
-          expiresIn: 360000,
-        },
-        (err, token) => {
-          if (err) throw err;
-
-          res.json({ token, user });
-        }
-      );
-    } catch (error) {
-      console.log(error.message);
-      res.status(500).send('Server Error');
-    }
+    );
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Server Error');
   }
-);
+});
 
 //Logging in the already registered user
 router.post(
@@ -170,7 +159,7 @@ router.post(
   }
 );
 
-router.get('/', auth, async (req, res) => {
+router.get('/', validation, auth, async (req, res) => {
   try {
     const user = await User.findById(res.locals.user._id).select('-password');
     console.log(user.name);
