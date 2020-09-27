@@ -9,7 +9,7 @@ const {
   OneCourse,
   analytics,
 } = require('../Controllers/myCourse');
-const fileupload = require('express-fileupload');
+
 const { upload } = require('../middleware/multer');
 router.route('/enroll/:course_id').post(GetUser, Enroll);
 router.route('/').get(GetUser, MyCourse);
