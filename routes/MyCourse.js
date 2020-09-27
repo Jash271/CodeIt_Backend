@@ -20,6 +20,6 @@ router.route('/analytics/:course_id/:user_id').get(GetUser, analytics);
 router.route('/track_students/:course_id').get(admin_access, Student_Progress);
 router
   .route('/marks_entry/:course_id/:quiz_id')
-  .get(admin_access, upload.single('file'), Marks_Entry);
+  .post(admin_access, upload.single('file'), Marks_Entry);
 
 module.exports = router;

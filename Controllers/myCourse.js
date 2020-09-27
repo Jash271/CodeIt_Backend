@@ -85,6 +85,7 @@ exports.Marks_Entry = async (req, res, next) => {
         Course: req.params.course_id,
       });
       console.log(mycourse);
+
       let obj = {
         quiz: req.params.quiz_id,
         marks: d.Score.split('/')[0],
