@@ -15,6 +15,15 @@ exports.Enroll = async (req, res, next) => {
     req.body.user = req.user._id;
     req.body.Course = req.params.course_id;
     console.log(req.body);
+    const c = await MyCourse.findOne({
+      Course: req.params.course_id,
+      user: req.user._id,
+    });
+    if (c) {
+      return res
+        .status(400)
+        .json({ msg: 'You are already enrolled in this course' });
+    }
     const course = await MyCourse.create(req.body);
     return res.status(200).json({ success: true, data: course });
   } catch (error) {}
