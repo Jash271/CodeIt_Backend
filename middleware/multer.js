@@ -22,7 +22,8 @@ exports.upload = multer({
       file.mimetype == 'image/jpeg' ||
       file.mimetype == 'text/csv' ||
       file.mimetype == 'application/vnd.ms-excel' ||
-      application / vnd.openxmlformats - officedocument.spreadsheetml.sheet
+      file.mimetype ==
+        'application/vnd.openxmlformats - officedocument.spreadsheetml.sheet'
     ) {
       cb(null, true);
     } else {
