@@ -29,6 +29,11 @@ app.use('/api', Payment);
 
 const PORT = process.env.PORT || 5000;
 
+
 app.listen(PORT, () => {
   console.log(`Hey! listening to you on port ${PORT}`);
 });
+
+app.get('/', (req, res) => {
+    res.send({ msg: "Hello" })
+})
