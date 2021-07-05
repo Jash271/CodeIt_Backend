@@ -221,4 +221,26 @@ router.get('/', validation, auth, async (req, res) => {
   }
 });
 
+router.get('/getAll', auth, async (req, res) => {
+  try {
+
+    if (req.user.role !== 'admin') {
+      return res.status(500).send({ msg: 'You are not authorized to this facility!' });
+    }
+
+    const allUsers = await User.find({});
+
+    if (!allUsers) {
+      return res.status(404).send({ msg: 'No user has been registered' });
+    }
+
+    return res.status(200).send(allUsers);
+
+  } catch (error) {
+
+    res.status(500).send(error.message);
+  }
+})
+
+
 module.exports = router;
