@@ -1,5 +1,5 @@
 {
-  "mongoURI": "mongodb+srv://Heth:Gala567@cluster0.kklpg.mongodb.net/Code_IT?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://admin:<password>@cluster0.sxpsr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   "jwtSecret": "Hethgala",
   "SMTP_HOST": "smtp.mailtrap.io",
   "SMTP_PORT": "587",
